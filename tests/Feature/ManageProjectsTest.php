@@ -91,7 +91,7 @@ class ManageProjectsTest extends TestCase
 
     }
     /** @test **/
-    public function a_porject_reqires_a_title()
+    public function a_porject_requires_a_title()
     {
         $this->actingAs(User::factory()->make());
 
@@ -101,7 +101,7 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test **/
-    public function a_porject_reqires_a_description()
+    public function a_porject_requires_a_description()
     {
         $this->actingAs(User::factory()->make());
 

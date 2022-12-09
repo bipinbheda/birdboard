@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectTasksContorller;
 use App\Http\Controllers\ProjectsContorller;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('projects', [ProjectsContorller::class, 'index']);
     Route::get('projects/create', [ProjectsContorller::class, 'create']);
     Route::get('projects/{project}', [ProjectsContorller::class, 'show']);
+    Route::post('projects/{project}/tasks', [ProjectTasksContorller::class, 'store']);
 });
 
 
