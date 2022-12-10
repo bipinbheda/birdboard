@@ -664,16 +664,16 @@ video {
   margin-top: -1px;
 }
 
-.-ml-5 {
-  margin-left: -1.25rem;
-}
-
 .mb-6 {
   margin-bottom: 1.5rem;
 }
 
 .mb-8 {
   margin-bottom: 2rem;
+}
+
+.-ml-5 {
+  margin-left: -1.25rem;
 }
 
 .flex {

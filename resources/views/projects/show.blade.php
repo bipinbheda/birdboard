@@ -21,8 +21,11 @@
                     @forelse($project->tasks as $task)
                         <div class="card mb-3">{{ $task->body }}</div>
                     @empty
-                        <div class="card mb-3">Not Task Found.</div>
                     @endforelse
+                    <form action="{{ $project->path(). '/tasks' }}" method="post">
+                        @csrf
+                        <input class="card mb-3 w-full" placeholder="Add a new task." name="body">
+                    </form>
                 </div>
 
                 <div>
