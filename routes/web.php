@@ -25,9 +25,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('projects', [ProjectsContorller::class, 'index']);
     Route::get('projects/create', [ProjectsContorller::class, 'create']);
     Route::get('projects/{project}', [ProjectsContorller::class, 'show']);
+    Route::get('/projects/{project}/edit', [ProjectsContorller::class, 'edit']);
+    Route::patch('/projects/{project}', [ProjectsContorller::class, 'update']);
     Route::post('projects/{project}/tasks', [ProjectTasksContorller::class, 'store']);
     Route::patch('/projects/{project}/tasks/{task}', [ProjectTasksContorller::class, 'update']);
-    Route::patch('/projects/{project}', [ProjectsContorller::class, 'update']);
 });
 
 

@@ -18,13 +18,8 @@ class ProjectsContorller extends Controller
 
     public function store()
     {
-        $attributes = request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'notes' => 'min:3',
-        ]);
 
-        $project = Auth::user()->projects()->create($attributes);
+        $project = Auth::user()->projects()->create($this->projectValidate());
 
         return redirect($project->path());
     }
@@ -33,13 +28,7 @@ class ProjectsContorller extends Controller
     {
         $this->authorize('update', $project);
 
-        $attributes = request()->validate([
-            'title' => 'sometimes|required',
-            'description' => 'sometimes|required',
-            'notes' => 'sometimes|required',
-        ]);
-
-        $project->update($attributes);
+        $project->update($this->projectValidate());
 
         return redirect($project->path());
     }
@@ -47,6 +36,7 @@ class ProjectsContorller extends Controller
     public function show( Project $project )
     {
         $this->authorize('update', $project);
+
         return view('projects.show', compact('project'));
     }
 
@@ -54,7 +44,18 @@ class ProjectsContorller extends Controller
     {
         return view('projects.create');
     }
+
+    public function edit(Project $project)
+    {
+        return view('projects.edit', compact('project'));
+    }
+
+    public function projectValidate()
+    {
+        return request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'notes' => 'min:3',
+        ]);
+    }
 }
-
-
-// Next Episode 7
