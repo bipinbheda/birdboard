@@ -18,8 +18,27 @@
                     <h2 class="text-lg text-gray font-normal mb-3">Tasks</h2>
 
                     {{-- tasks --}}
+                    @if ($errors->any())
+                        <div class="text-red-500">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     @forelse($project->tasks as $task)
-                        <div class="card mb-3">{{ $task->body }}</div>
+                    <div class="card mb-3">
+                        <form action="{{ $project->path().'/tasks/'.$task->id }}" method="POST">
+                            @method('PATCH')
+                            @csrf
+                            <div class="flex">
+                            <input name="body" value="{{ $task->body }}" class="w-full {{ $task->completed ? 'text-gray-500' : '' }}" >
+                            <input name="completed" type="checkbox" value="1" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }} />
+                            </div>
+                        </form>
+                    </div>
                     @empty
                     @endforelse
                     <form action="{{ $project->path(). '/tasks' }}" method="post">

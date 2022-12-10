@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class ProjectTasksContorller extends Controller
 {
     public function store(Request $request, Project $project) {
-
         if ( auth()->user()->isNot($project->owner) ) {
              abort('403');
         }
@@ -17,11 +17,27 @@ class ProjectTasksContorller extends Controller
             'body' => 'required',
         ]);
 
-        // dd($attributes);
-
         $project->addTask($attributes);
 
         return redirect($project->path());
 
+    }
+
+    public function update(Request $request, Project $project, Task $task) {
+
+        if ( auth()->user()->isNot($project->owner) ) {
+             abort('403');
+        }
+
+        $attributes = $request->validate([
+            'body' => 'required',
+            'completed' => 'boolean',
+        ]);
+
+        $attributes['completed'] = $request->has('completed') ?? false;
+
+        $task->update($attributes);
+
+        return redirect($project->path());
     }
 }
