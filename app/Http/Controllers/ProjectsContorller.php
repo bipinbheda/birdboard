@@ -11,7 +11,6 @@ class ProjectsContorller extends Controller
 {
     public function index()
     {
-        // $projects = Project::all();
         $projects = Auth::user()->projects;
 
         return view('projects.index', compact('projects'));
@@ -22,24 +21,32 @@ class ProjectsContorller extends Controller
         $attributes = request()->validate([
             'title' => 'required',
             'description' => 'required',
+            'notes' => 'min:3',
         ]);
 
-        // $attributes['owner_id'] = Auth::id();
         $project = Auth::user()->projects()->create($attributes);
 
-        // Project::create($attributes);
+        return redirect($project->path());
+    }
+
+    public function update(Project $project)
+    {
+        $this->authorize('update', $project);
+
+        $attributes = request()->validate([
+            'title' => 'sometimes|required',
+            'description' => 'sometimes|required',
+            'notes' => 'sometimes|required',
+        ]);
+
+        $project->update($attributes);
 
         return redirect($project->path());
     }
 
     public function show( Project $project )
     {
-        if ( Auth::user()->isNot($project->owner) ) {
-            abort(403);
-        }
-
-        // $project = Project::findOrFail($project);
-
+        $this->authorize('update', $project);
         return view('projects.show', compact('project'));
     }
 

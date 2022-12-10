@@ -56,7 +56,8 @@ class ManageProjectsTest extends TestCase
 
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph
+            'description' => $this->faker->paragraph,
+            'notes' => 'This is a project note',
         ];
 
         $response = $this->post('/projects', $attributes);
@@ -67,7 +68,29 @@ class ManageProjectsTest extends TestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee(\Str::limit($attributes['description']))
+            ->assertSee($attributes['notes']);
+    }
+
+    /** @test **/
+    public function a_user_can_update_a_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->actingAs(User::factory()->create());
+
+        $project = Project::factory()->create(['owner_id' => Auth::id()]);
+
+        $this->patch($project->path(), [
+            'notes' => 'The task is been updated',
+        ])->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', [
+            'notes' => 'The task is been updated',
+        ]);
+
     }
 
     /** @test **/
@@ -94,6 +117,21 @@ class ManageProjectsTest extends TestCase
         $this->get($project->path())->assertStatus(403);
 
     }
+
+    /** @test **/
+    public function an_authenticate_user_cannot_update_the_projects_of_other()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $project = Project::factory()->create();
+
+        $this->patch($project->path(), ['notes' => 'Please updated'])->assertStatus(403);
+
+        $this->assertDatabaseMissing('projects', ['notes' => 'Please updated']);
+
+    }
+
+
     /** @test **/
     public function a_porject_requires_a_title()
     {

@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 class ProjectTasksContorller extends Controller
 {
     public function store(Request $request, Project $project) {
-        if ( auth()->user()->isNot($project->owner) ) {
+        /*if ( auth()->user()->isNot($project->owner) ) {
              abort('403');
-        }
+        }*/
+
+        $this->authorize('update', $project);
 
         $attributes = $request->validate([
             'body' => 'required',
@@ -25,9 +27,7 @@ class ProjectTasksContorller extends Controller
 
     public function update(Request $request, Project $project, Task $task) {
 
-        if ( auth()->user()->isNot($project->owner) ) {
-             abort('403');
-        }
+        $this->authorize('update', $task->project);
 
         $attributes = $request->validate([
             'body' => 'required',
