@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 class ManageProjectsTest extends TestCase
@@ -156,6 +157,44 @@ class ManageProjectsTest extends TestCase
         $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
+
+    /** @test **/
+    public function a_user_can_update_a_projects_general_notes()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($this->signIn())->withTasks(1)->create();
+
+        $this->get($project->path(). '/edit')->assertOk();
+
+        $attributes = [
+            'notes' => 'The task is been updated',
+        ];
+
+        $this->patch($project->path(), $attributes)->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', $attributes);
+
+    }
+
+    /** @test **/
+    public function a_user_can_update_a_projects_general_notes_to_empty()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($this->signIn())->withTasks(1)->create();
+
+        $this->get($project->path(). '/edit')->assertOk();
+
+        $attributes = [
+            'notes' => null,
+        ];
+
+        $this->patch($project->path(), $attributes)->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', $attributes);
+
     }
 
 }
