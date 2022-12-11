@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 
 class ProjectTasksTest extends TestCase
@@ -92,6 +93,24 @@ class ProjectTasksTest extends TestCase
         $attributes = Task::factory(['body' => ''])->make()->toArray();
 
         $this->post($project->path().'/tasks', $attributes)->assertSessionHasErrors('body');
+    }
+
+    /** @test **/
+    public function a_task_custom_class_test()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($this->signIn())->withTasks(1)->create();
+
+        $this->patch($project->path().'/tasks/'.$project->tasks->first()->id, [
+            'body' => 'Changed',
+            'completed' => 1,
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'Changed',
+            'completed' => 1,
+        ]);
     }
 
 }

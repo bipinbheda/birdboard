@@ -36,4 +36,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Continue on Lesson 16 - From 2:18
+// Continue on Lesson 18 - From the Beginning
