@@ -31,9 +31,14 @@ class ProjectTasksContorller extends Controller
 
         $attributes = $request->validate([
             'body' => 'required',
-            'completed' => 'boolean',
+            // 'completed' => 'boolean',
         ]);
 
+        $task->update($attributes);
+
+        if ( $request->has('completed') ) {
+            $task->complete();
+        }
         $attributes['completed'] = $request->has('completed') ?? false;
 
         $task->update($attributes);
