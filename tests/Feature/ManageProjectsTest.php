@@ -200,12 +200,8 @@ class ManageProjectsTest extends TestCase
     /** @test **/
     public function a_project_should_have_activity_list()
     {
-        // $this->withoutExceptionHandling();
-
         $project = ProjectFactory::ownedBy($this->signIn())->create();
-
         $this->get($project->path())->assertSee('Created the project');
-
     }
 
 }

@@ -14,18 +14,7 @@ class TaskObserver
      */
     public function created(Task $task)
     {
-        $task->project->recordActivity('created_task');
-    }
-
-    /**
-     * Handle the Project "updated" event.
-     *
-     * @param  \App\Models\Project  $project
-     * @return void
-     */
-    public function updated(Task $task)
-    {
-        // $task->project->recordActivity('deleted_task');
+        $task->recordActivity('created_task');
     }
 
     /**
