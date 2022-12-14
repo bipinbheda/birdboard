@@ -12,6 +12,8 @@ class Project extends Model
 
     protected $guarded = [];
 
+    public $old = [];
+
     public function path()
     {
         return "/projects/{$this->id}";
@@ -37,10 +39,26 @@ class Project extends Model
 
     public function recordActivity($description)
     {
-        $this->activity()->create(['description' => $description]);
+        $data = [
+            'description' => $description,
+            'changes' => $this->activityChanges($description),
+        ];
+        $this->activity()->create($data);
+
         /*Activity::create([
             'project_id' => $this->id,
             'description' => $type,
         ]);*/
+    }
+
+    public function activityChanges($description)
+    {
+        if ( $description != 'updated' ) {
+            return [];
+        }
+        return [
+                'before' => \Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
+                'after' => \Arr::except($this->getChanges(), 'updated_at'),
+            ];
     }
 }

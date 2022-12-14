@@ -5,6 +5,6 @@
         @csrf
         @method('PATCH')
         <h1 class="text-2xl font-normal mb-10 text-center">Edit your project</h1>
-        @include('projects.form', $project);
+        @include('projects.form', $project)
     </form>
 @endsection
