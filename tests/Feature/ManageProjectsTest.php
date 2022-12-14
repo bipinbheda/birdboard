@@ -71,9 +71,9 @@ class ManageProjectsTest extends TestCase
         $this->assertDatabaseHas('projects', $attributes);
 
         $this->get($project->path())
-            ->assertSee($attributes['title'])
-            ->assertSee(\Str::limit($attributes['description']))
-            ->assertSee($attributes['notes']);
+        ->assertSee($attributes['title'])
+        ->assertSee(\Str::limit($attributes['description']))
+        ->assertSee($attributes['notes']);
     }
 
     /** @test **/
@@ -194,6 +194,17 @@ class ManageProjectsTest extends TestCase
         $this->patch($project->path(), $attributes)->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
+
+    }
+
+    /** @test **/
+    public function a_project_should_have_activity_list()
+    {
+        // $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($this->signIn())->create();
+
+        $this->get($project->path())->assertSee('Created the project');
 
     }
 
