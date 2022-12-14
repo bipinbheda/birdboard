@@ -17,7 +17,7 @@ class Task extends Model
         'completed' => 'boolean'
     ];
 
-    protected static function boot()
+/*    protected static function boot()
     {
         parent::boot();
 
@@ -29,7 +29,11 @@ class Task extends Model
             if (! $task->completed) return;
             // $task->project->recordActivity('completed_task');
         });
-    }
+
+        static::deleted(function($task){
+            $task->project->recordActivity('deleted_task');
+        });
+    }*/
 
     public function project() {
         return $this->belongsTo(Project::class);
@@ -48,6 +52,6 @@ class Task extends Model
     public function incomplete()
     {
         $this->update(['completed' => false]);
-        // $this->project->recordActivity('completed_task');
+        $this->project->recordActivity('incompleted_task');
     }
 }
