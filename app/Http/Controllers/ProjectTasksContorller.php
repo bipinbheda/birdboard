@@ -11,37 +11,37 @@ class ProjectTasksContorller extends Controller
     public function store(Request $request, Project $project) {
         /*if ( auth()->user()->isNot($project->owner) ) {
              abort('403');
-        }*/
+         }*/
 
-        $this->authorize('update', $project);
+         $this->authorize('update', $project);
 
-        $attributes = $request->validate([
+         $attributes = $request->validate([
             'body' => 'required',
         ]);
 
-        $project->addTask($attributes);
+         $project->addTask($attributes);
 
-        return redirect($project->path());
+         return redirect($project->path());
 
-    }
+     }
 
-    public function update(Request $request, Project $project, Task $task) {
+     public function update(Request $request, Project $project, Task $task) {
 
         $this->authorize('update', $task->project);
 
         $attributes = $request->validate([
             'body' => 'required',
-            // 'completed' => 'boolean',
         ]);
-
         $task->update($attributes);
 
-        if ( $request->has('completed') ) {
+        $method = $request->get('completed') ? 'complete' : 'incomplete';
+        $task->$method();
+
+        /*if ( $request->get('completed') ) {
             $task->complete();
-        }
-        $attributes['completed'] = $request->has('completed') ?? false;
-
-        $task->update($attributes);
+        } else {
+            $task->incomplete();
+        }*/
 
         return redirect($project->path());
     }
