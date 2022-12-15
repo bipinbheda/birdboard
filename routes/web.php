@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationsContorller;
 use App\Http\Controllers\ProjectTasksContorller;
 use App\Http\Controllers\ProjectsContorller;
 use App\Models\Project;
@@ -39,6 +40,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('projects', ProjectsContorller::class);
 
     Route::post('projects/{project}/tasks', [ProjectTasksContorller::class, 'store']);
+    Route::post('projects/{project}/invitations', [ProjectInvitationsContorller::class, 'store']);
     Route::patch('/projects/{project}/tasks/{task}', [ProjectTasksContorller::class, 'update']);
 });
 
