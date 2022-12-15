@@ -24,15 +24,7 @@
                     <h2 class="text-lg text-gray font-normal mb-3">Tasks</h2>
 
                     {{-- tasks --}}
-                    @if ($errors->any())
-                        <div class="text-red-500">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                   @include('projects.errors')
 
                     @forelse($project->tasks as $task)
                     <div class="card mb-3">
@@ -70,9 +62,9 @@
                 @include ('projects.card')
 
                 @include ('projects.activity.card')
+
+                @include('projects.invite')
             </div>
         </div>
     </main>
-
-
 @endsection
