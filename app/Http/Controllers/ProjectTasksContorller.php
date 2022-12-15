@@ -12,7 +12,6 @@ class ProjectTasksContorller extends Controller
         /*if ( auth()->user()->isNot($project->owner) ) {
              abort('403');
          }*/
-
          $this->authorize('update', $project);
 
          $attributes = $request->validate([
@@ -26,7 +25,6 @@ class ProjectTasksContorller extends Controller
      }
 
      public function update(Request $request, Project $project, Task $task) {
-
         $this->authorize('update', $task->project);
 
         $attributes = $request->validate([
