@@ -56,21 +56,17 @@ class ManageProjectsTest extends TestCase
 
         $this->get('projects/create')->assertStatus(200);
 
-        $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-            'notes' => 'This is a project note',
-        ];
+        $attributes = Project::factory(['owner_id' => auth()->id()])->raw();
 
-        $response = $this->post('/projects', $attributes);
+        $response = $this->followingRedirects()->post('/projects', $attributes);
 
-        $project = Project::where($attributes)->first();
+        // $project = Project::where($attributes)->first();
 
-        $response->assertRedirect($project->path());
+        // $response->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get($project->path())
+        $response
         ->assertSee($attributes['title'])
         ->assertSee(\Str::limit($attributes['description']))
         ->assertSee($attributes['notes']);
@@ -84,6 +80,20 @@ class ManageProjectsTest extends TestCase
         $project = tap(ProjectFactory::create())->invite($this->signIn());
 
         $this->get('/projects')->assertSee($project->title);
+    }
+
+    /** @test **/
+    public function unauthorized_user_cannot_delete_a_project()
+    {
+        $project = Project::factory()->create();
+
+        $this->delete($project->path())->assertRedirect('login');
+
+        $user = User::factory()->create();
+
+        $project->invite($user);
+        $this->actingAs($user)->delete($project->path())->assertForbidden();
+
     }
 
     /** @test **/

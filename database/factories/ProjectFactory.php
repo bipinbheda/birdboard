@@ -17,6 +17,7 @@ class ProjectFactory extends Factory
         return [
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->sentence(4),
+            'notes' => $this->faker->sentence(4),
             'owner_id'  => function() {
                 return User::factory()->create()->id;
             }
