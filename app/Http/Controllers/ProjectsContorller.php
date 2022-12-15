@@ -57,4 +57,11 @@ class ProjectsContorller extends Controller
             'notes' => 'min:3',
         ]);
     }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('delete', $project);
+        $project->delete();
+        return redirect('/projects');
+    }
 }

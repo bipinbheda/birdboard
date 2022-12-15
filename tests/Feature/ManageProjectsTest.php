@@ -81,7 +81,6 @@ class ManageProjectsTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-
         $this->actingAs(User::factory()->create());
 
         $project = Project::factory()->create(['owner_id' => Auth::id()]);
@@ -97,7 +96,28 @@ class ManageProjectsTest extends TestCase
         $this->patch($project->path(), $attributes)->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
+    }
 
+    /** @test **/
+    public function a_user_can_delete_a_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::ownedBy($this->signIn())->create();
+
+        $this->delete($project->path())->assertRedirect('/projects');
+        $this->assertDatabaseMissing('projects',$project->only('id'));
+
+    }
+
+    /** @test **/
+    public function guests_cannot_delete_a_projects()
+    {
+        $project = ProjectFactory::create();
+
+        $this->delete($project->path())->assertRedirect('login');
+        $this->signIn();
+        $this->delete($project->path())->assertForbidden();
     }
 
     /** @test **/
