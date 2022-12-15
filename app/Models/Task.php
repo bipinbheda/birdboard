@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\RecordActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, RecordActivity;
 
     protected $fillable = ['body', 'completed'];
 
     protected $touches = ['project'];
+
+    protected static $recordableEvents = ['created','deleted'];
 
     protected $casts = [
         'completed' => 'boolean'
@@ -60,12 +63,4 @@ class Task extends Model
         return $this->morphMany(Activity::class, 'subject')->latest();
     }
 
-    public function recordActivity($description)
-    {
-        $this->activity()->create([
-            'project_id' => $this->project_id,
-            'description' => $description,
-            'user_id' => auth()->id() ?? $this->project->owner->id
-        ]);
-    }
 }

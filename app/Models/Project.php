@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Traits\RecordActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory, RecordActivity;
 
     protected $guarded = [];
 
-    public $old = [];
+    protected static $recordableEvents = ['created','updated'];
 
     public function path()
     {
@@ -37,29 +38,4 @@ class Project extends Model
         return $this->hasMany(Activity::class)->latest();
     }
 
-    public function recordActivity($description)
-    {
-        $data = [
-            'description' => $description,
-            'changes' => $this->activityChanges($description),
-            'user_id' => auth()->id() ?? $this->owner->id
-        ];
-        $this->activity()->create($data);
-
-        /*Activity::create([
-            'project_id' => $this->id,
-            'description' => $type,
-        ]);*/
-    }
-
-    public function activityChanges($description)
-    {
-        if ( $description != 'updated' ) {
-            return [];
-        }
-        return [
-                'before' => \Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
-                'after' => \Arr::except($this->getChanges(), 'updated_at'),
-            ];
-    }
 }

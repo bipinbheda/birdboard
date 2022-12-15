@@ -17,10 +17,10 @@ class ProjectObserver
         $project->recordActivity('created');
     }
 
-    public function updating(Project $project)
+/*    public function updating(Project $project)
     {
         $project->old = $project->getRawOriginal();
-    }
+    }*/
 
     /**
      * Handle the Project "updated" event.
