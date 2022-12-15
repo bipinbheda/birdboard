@@ -77,6 +77,16 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test **/
+    public function a_user_can_see_all_the_projects_they_have_beed_invited_to_on_their_dashbord()
+    {
+        // $this->withoutExceptionHandling();
+
+        $project = tap(ProjectFactory::create())->invite($this->signIn());
+
+        $this->get('/projects')->assertSee($project->title);
+    }
+
+    /** @test **/
     public function a_user_can_update_a_project()
     {
         $this->withoutExceptionHandling();

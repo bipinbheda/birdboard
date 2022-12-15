@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ProjectTasksContorller;
 use App\Http\Controllers\ProjectsContorller;
-
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $project = Project::find(9);
+    $u = User::find(6);
+    dd($u->accessibleProjects());
     // dump();
     // dump(Arr::except($project->getAttributes(),'updated_at'));
     // dd(array_diff($project->getAttributes(), $project->getRawOriginal()));
