@@ -7,6 +7,6 @@
     @include('projects.form', [
         $project,
         'button_text' => 'Create'
-        ]);
-    </form>
-    @endsection
+        ])
+</form>
+@endsection

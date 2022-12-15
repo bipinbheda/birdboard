@@ -42,6 +42,7 @@ class Project extends Model
         $data = [
             'description' => $description,
             'changes' => $this->activityChanges($description),
+            'user_id' => auth()->id() ?? $this->owner->id
         ];
         $this->activity()->create($data);
 
