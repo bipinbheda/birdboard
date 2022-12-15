@@ -3,11 +3,17 @@
 @section('content')
     <header class="flex items-center mb-3 py-4">
         <div class="flex justify-between items-end w-full">
-            <p class="text-gray text-sm font-normal">
+            <p class="text-gray-500 text-sm font-normal">
                 <a href="/projects" class="text-gray text-sm font-normal no-underline hover:underline">My Projects</a> / {{ $project->title }}
             </p>
 
-            <a href="{{ $project->path(). '/edit' }}" class="button">Edit Project</a>
+            <div class="flex items-center">
+                @foreach ($project->members as $member)
+                    <img src="{{ gravatar_url($member->email) }}" alt="{{ $member->email }}'s avatar" class="rounded-full w-8 mr-2">
+                @endforeach
+                    <img src="{{ gravatar_url($project->owner->email) }}" alt="{{ $project->owner->email }}'s avatar" class="rounded-full w-8 mr-2">
+                <a href="{{ $project->path(). '/edit' }}" class="button">Edit Project</a>
+            </div>
         </div>
     </header>
 
