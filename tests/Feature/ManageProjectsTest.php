@@ -73,6 +73,22 @@ class ManageProjectsTest extends TestCase
     }
 
     /** @test **/
+    public function tasks_can_be_included_as_part_of_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+        $attributes = Project::factory()->raw();
+        $attributes['tasks'] = [
+            ['body' => 'task 1'],
+            ['body' => 'task 1'],
+        ];
+        $response = $this->followingRedirects()->post('/projects', $attributes);
+
+        $this->assertCount(2, Project::first()->tasks);
+    }
+
+    /** @test **/
     public function a_user_can_see_all_the_projects_they_have_beed_invited_to_on_their_dashbord()
     {
         // $this->withoutExceptionHandling();

@@ -19,7 +19,7 @@ class ProjectFactory extends Factory
             'description' => $this->faker->sentence(4),
             'notes' => $this->faker->sentence(4),
             'owner_id'  => function() {
-                return User::factory()->create()->id;
+                return auth()->id() ?? User::factory()->create()->id;
             }
        ];
    }

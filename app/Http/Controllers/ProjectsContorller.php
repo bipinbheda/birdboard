@@ -19,8 +19,11 @@ class ProjectsContorller extends Controller
 
     public function store()
     {
-
         $project = Auth::user()->projects()->create($this->projectValidate());
+
+        if ( request()->has('tasks') ) {
+            $project->addTasks(request('tasks'));
+        }
 
         if (request()->wantsJson()) {
             return ['message' => $project->path()];
@@ -58,6 +61,8 @@ class ProjectsContorller extends Controller
         return request()->validate([
             'title' => 'sometimes|required',
             'description' => 'sometimes|required',
+            // 'tasks' => 'sometimes|required',
+            // 'tasks.*.body' => 'sometimes|required',
             'notes' => 'min:3',
         ]);
     }

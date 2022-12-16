@@ -23,7 +23,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         title: '',
         description: '',
         tasks: [{
-          value: ''
+          body: ''
         }]
       },
       errors: {}
@@ -180,8 +180,8 @@ var render = function render() {
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: task.value,
-        expression: "task.value"
+        value: task.body,
+        expression: "task.body"
       }],
       staticClass: "border border-muted-light mb-2 p-2 text-xs block w-full rounded",
       attrs: {
@@ -189,12 +189,12 @@ var render = function render() {
         placeholder: "Task 1"
       },
       domProps: {
-        value: task.value
+        value: task.body
       },
       on: {
         input: function input($event) {
           if ($event.target.composing) return;
-          _vm.$set(task, "value", $event.target.value);
+          _vm.$set(task, "body", $event.target.value);
         }
       }
     });

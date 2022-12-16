@@ -1,5 +1,5 @@
 @if (count($activity->changes['after']) === 1)
-	You updated the {{ key($activity->changes['after']) }}
+	{{ $activity->user->name }} the {{ key($activity->changes['after']) }}
 @else
-You Updated the project
+{{ $activity->user->name }} the project
 @endif
