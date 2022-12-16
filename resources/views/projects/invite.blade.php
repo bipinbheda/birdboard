@@ -7,7 +7,7 @@
     <footer>
         <form action="{{ $project->path() . '/invitations' }}" method="post">
             @csrf
-            <input type="email" name="email" class="py-1 border-black border w-full rounded">
+            <input type="email" name="email" class="py-1 border-gray-500 outline-gray-500 border w-full rounded">
             <button type="submit" class="text-xs button mt-4">Invite</button>
         </form>
     </footer>
