@@ -11,17 +11,17 @@
                         type="text"
                         id="title"
                         class="border p-2 text-xs block w-full rounded"
-                        :class="errors.title ? 'border border-red-500' : 'border-muted-light'"
+                        :class="form.errors.title ? 'border border-red-500' : 'border-muted-light'"
                         v-model="form.title"
                         >
-                        <span class="text-xs italic text-red-500" v-if="errors.title" v-text="errors.title[0]"></span>
+                        <span class="text-xs italic text-red-500" v-if="form.errors.title" v-text="form.errors.title[0]"></span>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="text-sm block mb-2">Description</label>
 
                         <textarea id="description" class="border border-muted-light p-2 text-xs block w-full rounded" rows="7" v-model="form.description"></textarea>
-                        <span class="text-xs italic text-red-500" v-if="errors.description" v-text="errors.description[0]"></span>
+                        <span class="text-xs italic text-red-500" v-if="form.errors.description" v-text="form.errors.description[0]"></span>
                     </div>
                 </div>
 
@@ -59,32 +59,43 @@
 </template>
 
 <script>
+    // import BirdboardForm from './BirdboardForm.js';
+    import BirdboardForm from '../BirdboardForm.js'
+
+
     export default {
         data() {
             return {
-                form: {
+                form: new BirdboardForm({
                     title: '',
                     description: '',
                     tasks: [
                         {body: ''}
                         ]
-                },
-                errors: {}
+                })
             };
         },
         methods: {
             addTask() {
-                this.form.tasks.push({value: ''})
+                this.form.tasks.push({body: ''})
             },
 
             async submit() {
-                try {
+
+                if ( ! this.form.tasks[0].body ) {
+                    delete this.form.originalData.tasks;
+                }
+
+                this.form.submit('/projects')
+                .then(response => location = response.data.message )
+                .catch(error => alert('error'));
+                /*try {
                     let response = await axios.post('/projects', this.form);
                     location = response.data.message;
 
                 } catch (error) {
                     this.errors = error.response.data.errors;
-                }
+                }*/
 
                 /*axios.post('/projects', this.form)
                 .then(response => {
